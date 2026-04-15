@@ -1,0 +1,298 @@
+{
+    "users": {
+        "user_001": {
+            "name": "Mock User",
+            "email": "mockuser@example.com",
+            "activePassId": "user_pass_001",
+            "currentReservationId": "reservation_001",
+            "currentRideId": null
+        }
+    },
+    "stations": {
+        "station_001": {
+            "name": "CADT Main Gate",
+            "latitude": 11.5682,
+            "longitude": 104.8905,
+            "totalBikes": 6,
+            "availableBikes": 4,
+            "status": "open"
+        },
+        "station_002": {
+            "name": "Olympic Stadium",
+            "latitude": 11.5489,
+            "longitude": 104.9143,
+            "totalBikes": 5,
+            "availableBikes": 2,
+            "status": "open"
+        },
+        "station_003": {
+            "name": "Central Market",
+            "latitude": 11.5715,
+            "longitude": 104.9160,
+            "totalBikes": 7,
+            "availableBikes": 5,
+            "status": "open"
+        },
+        "station_004": {
+            "name": "Wat Phnom",
+            "latitude": 11.5763,
+            "longitude": 104.9282,
+            "totalBikes": 4,
+            "availableBikes": 1,
+            "status": "open"
+        },
+        "station_005": {
+            "name": "Riverside Night Market",
+            "latitude": 11.5740,
+            "longitude": 104.9306,
+            "totalBikes": 6,
+            "availableBikes": 0,
+            "status": "open"
+        }
+    },
+    "bikes": {
+        "bike_001": {
+            "stationId": "station_001",
+            "bikeCode": "20251",
+            "status": "available",
+            "usedToday": 2
+        },
+        "bike_002": {
+            "stationId": "station_001",
+            "bikeCode": "20252",
+            "status": "available",
+            "usedToday": 1
+        },
+        "bike_003": {
+            "stationId": "station_001",
+            "bikeCode": "20253",
+            "status": "reserved",
+            "usedToday": 3
+        },
+        "bike_004": {
+            "stationId": "station_001",
+            "bikeCode": "20254",
+            "status": "available",
+            "usedToday": 0
+        },
+        "bike_005": {
+            "stationId": "station_001",
+            "bikeCode": "20255",
+            "status": "in_use",
+            "usedToday": 4
+        },
+        "bike_006": {
+            "stationId": "station_001",
+            "bikeCode": "20256",
+            "status": "available",
+            "usedToday": 2
+        },
+        "bike_007": {
+            "stationId": "station_002",
+            "bikeCode": "20301",
+            "status": "available",
+            "usedToday": 5
+        },
+        "bike_008": {
+            "stationId": "station_002",
+            "bikeCode": "20302",
+            "status": "available",
+            "usedToday": 2
+        },
+        "bike_009": {
+            "stationId": "station_002",
+            "bikeCode": "20303",
+            "status": "maintenance",
+            "usedToday": 0
+        },
+        "bike_010": {
+            "stationId": "station_002",
+            "bikeCode": "20304",
+            "status": "in_use",
+            "usedToday": 3
+        },
+        "bike_011": {
+            "stationId": "station_002",
+            "bikeCode": "20305",
+            "status": "reserved",
+            "usedToday": 1
+        },
+        "bike_012": {
+            "stationId": "station_003",
+            "bikeCode": "20401",
+            "status": "available",
+            "usedToday": 1
+        },
+        "bike_013": {
+            "stationId": "station_003",
+            "bikeCode": "20402",
+            "status": "available",
+            "usedToday": 0
+        },
+        "bike_014": {
+            "stationId": "station_003",
+            "bikeCode": "20403",
+            "status": "available",
+            "usedToday": 2
+        },
+        "bike_015": {
+            "stationId": "station_003",
+            "bikeCode": "20404",
+            "status": "available",
+            "usedToday": 4
+        },
+        "bike_016": {
+            "stationId": "station_003",
+            "bikeCode": "20405",
+            "status": "available",
+            "usedToday": 1
+        },
+        "bike_017": {
+            "stationId": "station_003",
+            "bikeCode": "20406",
+            "status": "in_use",
+            "usedToday": 3
+        },
+        "bike_018": {
+            "stationId": "station_003",
+            "bikeCode": "20407",
+            "status": "maintenance",
+            "usedToday": 0
+        },
+        "bike_019": {
+            "stationId": "station_004",
+            "bikeCode": "20501",
+            "status": "available",
+            "usedToday": 2
+        },
+        "bike_020": {
+            "stationId": "station_004",
+            "bikeCode": "20502",
+            "status": "in_use",
+            "usedToday": 5
+        },
+        "bike_021": {
+            "stationId": "station_004",
+            "bikeCode": "20503",
+            "status": "reserved",
+            "usedToday": 1
+        },
+        "bike_022": {
+            "stationId": "station_004",
+            "bikeCode": "20504",
+            "status": "maintenance",
+            "usedToday": 0
+        },
+        "bike_023": {
+            "stationId": "station_005",
+            "bikeCode": "20601",
+            "status": "in_use",
+            "usedToday": 6
+        },
+        "bike_024": {
+            "stationId": "station_005",
+            "bikeCode": "20602",
+            "status": "reserved",
+            "usedToday": 2
+        },
+        "bike_025": {
+            "stationId": "station_005",
+            "bikeCode": "20603",
+            "status": "maintenance",
+            "usedToday": 0
+        },
+        "bike_026": {
+            "stationId": "station_005",
+            "bikeCode": "20604",
+            "status": "in_use",
+            "usedToday": 4
+        },
+        "bike_027": {
+            "stationId": "station_005",
+            "bikeCode": "20605",
+            "status": "reserved",
+            "usedToday": 2
+        },
+        "bike_028": {
+            "stationId": "station_005",
+            "bikeCode": "20606",
+            "status": "maintenance",
+            "usedToday": 0
+        }
+    },
+    "passPlans": {
+        "plan_day": {
+            "name": "Day Pass",
+            "type": "day",
+            "price": 1,
+            "durationDays": 1,
+            "description": "Unlimited unlocks for 24 hours"
+        },
+        "plan_week": {
+            "name": "Weekly Pass",
+            "type": "weekly",
+            "price": 7,
+            "durationDays": 7,
+            "description": "Unlimited unlocks for 7 days"
+        },
+        "plan_month": {
+            "name": "Monthly Pass",
+            "type": "monthly",
+            "price": 15,
+            "durationDays": 30,
+            "description": "Unlimited unlocks for 30 days"
+        }
+    },
+    "userPasses": {
+        "user_pass_001": {
+            "userId": "user_001",
+            "planId": "plan_day",
+            "status": "active",
+            "startDate": "2026-04-14T08:00:00Z",
+            "endDate": "2026-04-15T08:00:00Z"
+        },
+        "user_pass_002": {
+            "userId": "user_001",
+            "planId": "plan_week",
+            "status": "expired",
+            "startDate": "2026-03-20T08:00:00Z",
+            "endDate": "2026-03-27T08:00:00Z"
+        }
+    },
+    "reservations": {
+        "reservation_001": {
+            "userId": "user_001",
+            "bikeId": "bike_003",
+            "stationId": "station_001",
+            "status": "active",
+            "reservedAt": "2026-04-14T09:50:00Z",
+            "expiresAt": "2026-04-14T10:00:00Z"
+        },
+        "reservation_002": {
+            "userId": "user_001",
+            "bikeId": "bike_011",
+            "stationId": "station_002",
+            "status": "expired",
+            "reservedAt": "2026-04-13T10:00:00Z",
+            "expiresAt": "2026-04-13T10:10:00Z"
+        }
+    },
+    "rides": {
+        "ride_001": {
+            "userId": "user_001",
+            "bikeId": "bike_010",
+            "stationId": "station_002",
+            "startTime": "2026-04-12T07:30:00Z",
+            "endTime": "2026-04-12T08:00:00Z",
+            "status": "completed"
+        },
+        "ride_002": {
+            "userId": "user_001",
+            "bikeId": "bike_017",
+            "stationId": "station_003",
+            "startTime": "2026-04-11T17:10:00Z",
+            "endTime": "2026-04-11T17:45:00Z",
+            "status": "completed"
+        }
+    }
+}

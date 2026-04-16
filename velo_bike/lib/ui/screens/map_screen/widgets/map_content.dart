@@ -4,6 +4,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:velo_bike/ui/screens/map_screen/viewmodel/map_vm.dart';
 import 'package:velo_bike/ui/theme/app_spacing.dart';
+import 'package:velo_bike/ui/screens/station_screen/station_detail_screen.dart';
 
 class MapContent extends StatelessWidget {
   const MapContent({super.key});
@@ -49,6 +50,10 @@ class MapContent extends StatelessWidget {
                     }
 
                     // navigate to station detail
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => StationDetailScreen(station: station)),
+                    );
                   },
                   child: Column(
                     mainAxisSize: MainAxisSize.min,

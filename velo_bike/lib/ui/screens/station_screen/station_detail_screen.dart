@@ -101,7 +101,7 @@ class StationDetailScreen extends StatelessWidget {
     );
   }
 
-  //Unlock Navigation
+  // Navigate to Unlock Screen
   void _onUnlock(BuildContext context, Bike bike) {
     Navigator.pushNamed(
       context,

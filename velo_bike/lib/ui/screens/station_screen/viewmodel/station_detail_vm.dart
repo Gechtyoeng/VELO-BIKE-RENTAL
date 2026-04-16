@@ -21,11 +21,11 @@ class StationDetailViewModel extends ChangeNotifier {
           await bikeRepository.getBikesByStation(stationId);
 
       bikes = allBikes
-          .where((b) => b.status == "available")
+          .where((bike) => bike.status == "available")
           .toList();
 
       if (bikes.isEmpty) {
-        error = "No available bikes";
+         error = "No available bikes at this station";
       }
 
     } catch (e) {

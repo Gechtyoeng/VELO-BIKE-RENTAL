@@ -11,40 +11,33 @@ class FirebaseUnlockRepo implements UnlockRepository {
   @override
   Future<UnlockResult> unlockBike(String bikeId, String userId) async {
     try {
-      //fetch bike data from Firebase
-      final url = Uri.parse("$baseUrl/bikes.json");
+      final url = Uri.parse("$baseUrl/bikes/$bikeId.json");
       final response = await http.get(url);
 
       if (response.statusCode != 200) {
         return UnlockResult(
           success: false,
-          message: "Failed to load bikes from Firebase",
+          message: "Failed to fetch bike",
         );
       }
 
-      final data = json.decode(response.body) as Map<String, dynamic>;
+      final data = json.decode(response.body);
 
-      //ind bike
-      final bike = data[bikeId];
-
-      if (bike == null) {
+      if (data == null) {
         return UnlockResult(
           success: false,
           message: "Bike not found",
         );
       }
 
-      //check status
-      if (bike['status'] != 'available') {
+      if (data['status'] != 'available') {
         return UnlockResult(
           success: false,
           message: "Bike is not available",
         );
       }
 
-      //imulate unlock success
-      //later PATCH Firebase here
-
+      //simulate success 
       return UnlockResult(
         success: true,
         message: "Bike unlocked successfully",

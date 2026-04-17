@@ -67,13 +67,15 @@ class StationDetailContent extends StatelessWidget {
   }
 
   Widget _buildBikeCard(BuildContext context, Bike bike) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      child: ListTile(
-        title: Text("Bike Code: ${bike.bikeCode}"),
-        subtitle: Text("Used Today: ${bike.usedToday}"),
-        trailing: ElevatedButton(
-          child: const Text("Unlock"),
+  return Card(
+    margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+    child: ListTile(
+      title: Text("Bike Code: ${bike.bikeCode}"),
+      subtitle: Text("Used Today: ${bike.usedToday}"),
+
+      trailing: SizedBox(
+        width: 90, 
+        child: ElevatedButton(
           onPressed: () {
             Navigator.pushNamed(
               context,
@@ -81,8 +83,13 @@ class StationDetailContent extends StatelessWidget {
               arguments: bike,
             );
           },
+          child: const Text(
+            "Unlock",
+            overflow: TextOverflow.ellipsis, // prevent overflow
+          ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

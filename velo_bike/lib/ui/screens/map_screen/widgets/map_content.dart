@@ -2,16 +2,57 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
+import 'package:velo_bike/ui/screens/main_navigation_screen.dart';
 import 'package:velo_bike/ui/screens/map_screen/viewmodel/map_vm.dart';
-import 'package:velo_bike/ui/theme/app_spacing.dart';
-import 'package:velo_bike/ui/screens/station_screen/station_detail_screen.dart';
+import 'package:velo_bike/ui/screens/map_screen/widgets/search_suggestion_list.dart';
+import 'package:velo_bike/ui/states/active_pass_state.dart';
 
-class MapContent extends StatelessWidget {
+import 'bike_map_view.dart';
+import 'map_pass_panel.dart';
+import 'map_search_panel.dart';
+
+class MapContent extends StatefulWidget {
   const MapContent({super.key});
 
-  Color _markerColor(int availableBikes) {
-    if (availableBikes < 3) return Colors.orange;
-    return Colors.green;
+  @override
+  State<MapContent> createState() => _MapContentState();
+}
+
+class _MapContentState extends State<MapContent> {
+  bool _isPassExpanded = false;
+  bool _isSearchExpanded = false;
+
+  final TextEditingController _searchController = TextEditingController();
+  final MapController _mapController = MapController();
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _togglePassPanel() {
+    setState(() {
+      _isPassExpanded = !_isPassExpanded;
+      if (_isPassExpanded) _isSearchExpanded = false;
+    });
+  }
+
+  void _toggleSearchPanel() {
+    setState(() {
+      _isSearchExpanded = !_isSearchExpanded;
+      if (_isSearchExpanded) _isPassExpanded = false;
+    });
+  }
+
+  void _closePanels() {
+    FocusScope.of(context).unfocus();
+
+    if (_isPassExpanded || _isSearchExpanded) {
+      setState(() {
+        _isPassExpanded = false;
+        _isSearchExpanded = false;
+      });
+    }
   }
 
   @override
@@ -27,51 +68,71 @@ class MapContent extends StatelessWidget {
     }
 
     return Scaffold(
-      body: FlutterMap(
-        options: const MapOptions(
-          initialCenter: LatLng(11.5564, 104.9282), // Phnom Penh
-          initialZoom: 13,
-        ),
+      body: Stack(
         children: [
-          TileLayer(urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', userAgentPackageName: 'com.example.velo'),
-          MarkerLayer(
-            markers: vm.stations.map((station) {
-              final isAvailable = vm.isStationAvailable(station);
-
-              return Marker(
-                point: LatLng(station.latitude, station.longitude),
-                width: 80,
-                height: 80,
-                child: GestureDetector(
-                  onTap: () {
-                    if (!isAvailable) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('No bikes available at this station')));
-                      return;
-                    }
-
-                    // navigate to station detail
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => StationDetailScreen(station: station)),
-                    );
-                  },
+          GestureDetector(
+            onTap: _closePanels,
+            behavior: HitTestBehavior.translucent,
+            child: BikeMapView(stations: vm.stations, isStationAvailable: vm.isStationAvailable, onBackgroundTap: _closePanels, mapController: _mapController),
+          ),
+          SafeArea(
+            child: Stack(
+              children: [
+                Positioned(
+                  top: 12,
+                  left: 16,
+                  right: 16,
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Icon(Icons.location_on, size: 36, color: isAvailable ? _markerColor(station.availableBikes) : Colors.grey),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                        decoration: BoxDecoration(color: isAvailable ? Colors.white : Colors.grey.shade300, borderRadius: BorderRadius.circular(8)),
-                        child: Text(
-                          '${station.availableBikes}',
-                          style: TextStyle(fontWeight: FontWeight.bold, color: isAvailable ? Colors.black : Colors.grey),
-                        ),
+                      MapSearchPanel(
+                        isExpanded: _isSearchExpanded,
+                        controller: _searchController,
+                        onToggle: _toggleSearchPanel,
+                        onClear: () {
+                          _searchController.clear();
+                          vm.clearSearch();
+                          setState(() {});
+                        },
+                        onChanged: (value) {
+                          vm.searchStations(value);
+                          setState(() {});
+                        },
                       ),
+                      if (_isSearchExpanded && _searchController.text.trim().isNotEmpty)
+                        SearchSuggestionList(
+                          stations: vm.stations,
+                          onSelect: (station) {
+                            _searchController.text = station.name;
+
+                            _mapController.move(LatLng(station.latitude, station.longitude), 16);
+
+                            vm.searchStations(station.name);
+
+                            setState(() {
+                              _isSearchExpanded = false;
+                            });
+
+                            FocusScope.of(context).unfocus();
+                          },
+                        ),
                     ],
                   ),
                 ),
-              );
-            }).toList(),
+                Positioned(
+                  top: 84,
+                  right: 16,
+                  child: MapPassPanel(
+                    isExpanded: _isPassExpanded,
+                    activePass: context.watch<ActivePassNotifier>().activePass,
+                    onToggle: _togglePassPanel,
+                    onGetPassTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => MainNavigationScreen()));
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

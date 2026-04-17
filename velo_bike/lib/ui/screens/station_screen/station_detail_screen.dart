@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/station.dart';
-import '../../../data/repositories/bikes/firebase_bike_repo.dart';
+import 'package:velo_bike/data/repositories/bikes/bike_repository.dart';
 import 'viewmodel/station_detail_vm.dart';
 import './widget/station_detail_content.dart';
 
@@ -14,9 +14,15 @@ class StationDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) =>
-          StationDetailViewModel(FirebaseBikeRepo())
-            ..loadBikes(station.id),
+      create: (context) {
+        final vm = StationDetailViewModel(
+          context.read<BikeRepository>(), //use Provider
+        );
+
+        vm.loadBikes(station.id); //load here
+
+        return vm;
+      },
       child: StationDetailContent(station: station),
     );
   }

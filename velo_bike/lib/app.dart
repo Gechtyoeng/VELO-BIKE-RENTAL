@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
         Provider<BikeRepository>(create: (_) => FirebaseBikeRepo()),
         Provider<PassRepository>(create: (_) => FirebasePassRepo()),
         Provider<UnlockRepository>(create: (_) => FirebaseUnlockRepo()),
+        Provider<UnlockRepository>(create: (_) => FirebaseUnlockRepo(),),
         //Global state
         ChangeNotifierProvider(create: (context) => AuthState(context.read<UserRepository>())..loadUser('user_001')),
         ChangeNotifierProvider(create: (_) => ActivePassNotifier()),
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
   ),
       ],
       child: MaterialApp(debugShowCheckedModeBanner: false, title: 'Velo', theme: AppTheme.lightTheme, home: AppStarter(), 
-      routes: {'/unlock': (context) => const UnlockScreen(),}),
+      ),
     );
   }
 }

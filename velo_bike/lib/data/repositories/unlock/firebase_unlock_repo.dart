@@ -11,33 +11,52 @@ class FirebaseUnlockRepo implements UnlockRepository {
   @override
   Future<UnlockResult> unlockBike(String bikeId, String userId) async {
     try {
-      final url = Uri.parse("$baseUrl/bikes/$bikeId.json");
-      final response = await http.get(url);
+      //check user pass
+      final userUrl = Uri.parse("$baseUrl/users/$userId.json");
+      final userRes = await http.get(userUrl);
 
-      if (response.statusCode != 200) {
-        return UnlockResult(
-          success: false,
-          message: "Failed to fetch bike",
-        );
+      if (userRes.statusCode != 200) {
+        return UnlockResult(success: false, message: "Failed to fetch user");
       }
 
-      final data = json.decode(response.body);
+      final userData = json.decode(userRes.body);
 
-      if (data == null) {
-        return UnlockResult(
-          success: false,
-          message: "Bike not found",
-        );
+      final activePassId = userData['activePassId'];
+
+      if (activePassId == null) {
+        return UnlockResult(success: false, message: "NO_PASS");
       }
 
-      if (data['status'] != 'available') {
-        return UnlockResult(
-          success: false,
-          message: "Bike is not available",
-        );
+      //check bike status
+      final bikeUrl = Uri.parse("$baseUrl/bikes/$bikeId.json");
+      final bikeRes = await http.get(bikeUrl);
+
+      if (bikeRes.statusCode != 200) {
+        return UnlockResult(success: false, message: "Failed to fetch bike");
       }
 
-      //simulate success 
+      final bikeData = json.decode(bikeRes.body);
+
+      if (bikeData == null) {
+        return UnlockResult(success: false, message: "Bike not found");
+      }
+
+      if (bikeData['status'] != 'available') {
+        return UnlockResult(success: false, message: "Bike is not available");
+      }
+
+      //update bike status to 
+      final updateRes = await http.patch(
+        bikeUrl,
+        body: json.encode({
+          "status": "in_use",
+        }),
+      );
+
+      if (updateRes.statusCode != 200) {
+        return UnlockResult(success: false, message: "Failed to unlock bike");
+      }
+
       return UnlockResult(
         success: true,
         message: "Bike unlocked successfully",

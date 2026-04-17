@@ -32,7 +32,7 @@ class StationDetailContent extends StatelessWidget {
     return Column(
       children: [
         _buildStationInfo(),
-        Expanded(child: _buildBikeList(vm)),
+        Expanded(child: _buildBikeList(context, vm)),
       ],
     );
   }
@@ -44,9 +44,7 @@ class StationDetailContent extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         child: Column(
           children: [
-            Text(station.name,
-                style: const TextStyle(
-                    fontSize: 18, fontWeight: FontWeight.bold)),
+            Text(station.name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             Text("Total Bikes: ${station.totalBikes}"),
             Text("Available Bikes: ${station.availableBikes}"),
@@ -56,7 +54,11 @@ class StationDetailContent extends StatelessWidget {
     );
   }
 
-  Widget _buildBikeList(StationDetailViewModel vm) {
+  Widget _buildBikeList(BuildContext context, StationDetailViewModel vm) {
+    if (vm.bikes.isEmpty) {
+      return const Center(child: Text("No bikes available at this station"));
+    }
+
     return ListView.builder(
       itemCount: vm.bikes.length,
       itemBuilder: (context, index) {
@@ -69,18 +71,38 @@ class StationDetailContent extends StatelessWidget {
   Widget _buildBikeCard(BuildContext context, Bike bike) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      child: ListTile(
-        title: Text("Bike Code: ${bike.bikeCode}"),
-        subtitle: Text("Used Today: ${bike.usedToday}"),
-        trailing: ElevatedButton(
-          child: const Text("Unlock"),
-          onPressed: () {
-            Navigator.pushNamed(
-              context,
-              '/unlock',
-              arguments: bike,
-            );
-          },
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Bike Code: ${bike.bikeCode}",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 4),
+                  Text("Used Today: ${bike.usedToday}", maxLines: 1, overflow: TextOverflow.ellipsis),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            SizedBox(
+              height: 40,
+              width: 100,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/unlock', arguments: bike);
+                },
+                child: const Text("Unlock"),
+              ),
+            ),
+          ],
         ),
       ),
     );

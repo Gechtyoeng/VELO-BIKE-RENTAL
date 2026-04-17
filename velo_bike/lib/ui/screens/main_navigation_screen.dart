@@ -13,7 +13,7 @@ class MainNavigationScreen extends StatefulWidget {
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _currentIndex = 1;
 
-  late final List<Widget> _screens = [const PassScreen(), const MapScreen(), const ProfileScree()];
+  late final List<Widget> _screens = [const PassScreen(), MapScreen(onNavigate: _onTabSelected), const ProfileScree()];
 
   void _onTabSelected(int index) {
     setState(() {

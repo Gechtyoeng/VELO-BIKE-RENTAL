@@ -5,7 +5,8 @@ import 'package:velo_bike/ui/screens/map_screen/viewmodel/map_vm.dart';
 import 'package:velo_bike/ui/screens/map_screen/widgets/map_content.dart';
 
 class MapScreen extends StatelessWidget {
-  const MapScreen({super.key});
+  final ValueChanged<int> onNavigate;
+  const MapScreen({super.key, required this.onNavigate});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +14,7 @@ class MapScreen extends StatelessWidget {
       create: (context) => MapViewModel(
         context.read<StationRepository>(),
       )..loadStations(),
-      child: const MapContent(),
+      child: MapContent(onNavigate: onNavigate,),
     );
   }
 }

@@ -12,7 +12,8 @@ import 'map_pass_panel.dart';
 import 'map_search_panel.dart';
 
 class MapContent extends StatefulWidget {
-  const MapContent({super.key});
+  final ValueChanged<int> onNavigate;
+  const MapContent({super.key, required this.onNavigate});
 
   @override
   State<MapContent> createState() => _MapContentState();
@@ -127,7 +128,7 @@ class _MapContentState extends State<MapContent> {
                     activePass: context.watch<ActivePassNotifier>().activePass,
                     onToggle: _togglePassPanel,
                     onGetPassTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => MainNavigationScreen()));
+                      widget.onNavigate(0);
                     },
                   ),
                 ),

@@ -16,7 +16,6 @@ import 'package:velo_bike/ui/screens/main_navigation_screen.dart';
 import 'package:velo_bike/ui/states/active_pass_state.dart';
 import 'package:velo_bike/ui/states/auth_state.dart';
 import 'package:velo_bike/ui/theme/app_theme.dart';
-import 'package:velo_bike/ui/screens/unlock_screen/viewmodel/unlock_vm.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -43,8 +42,6 @@ class MyApp extends StatelessWidget {
         //Global state
         ChangeNotifierProvider(create: (context) => AuthState(context.read<UserRepository>())..loadUser('user_001')),
         ChangeNotifierProvider(create: (_) => ActivePassNotifier()),
-
-        ChangeNotifierProvider(create: (context) => UnlockViewModel(context.read<UnlockRepository>(), context.read<AuthState>(), context.read<ActivePassNotifier>())),
       ],
       child: MaterialApp(debugShowCheckedModeBanner: false, title: 'Velo', theme: AppTheme.lightTheme, home: AppStarter()),
     );

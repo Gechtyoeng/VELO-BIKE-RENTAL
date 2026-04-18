@@ -31,7 +31,7 @@ class UnlockContent extends StatelessWidget {
 
   Widget _buildBody(BuildContext context, UnlockViewModel vm, dynamic activePass) {
     if (vm.isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return _buildLoadingState();
     }
 
     if (vm.isSuccess) {
@@ -146,6 +146,33 @@ class UnlockContent extends StatelessWidget {
                 vm.reset();
               },
               child: const Text("Try Again"),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLoadingState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.pedal_bike, size: 70, color: Colors.indigo),
+          const SizedBox(height: 20),
+          const Text("Unlocking bike...", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 10),
+          const Text(
+            "Please wait while we prepare your ride.",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 14, color: Colors.black54),
+          ),
+          const SizedBox(height: 24),
+          SizedBox(
+            width: 220,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: const LinearProgressIndicator(minHeight: 8, backgroundColor: Color(0xFFE0E0E0), valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo)),
             ),
           ),
         ],

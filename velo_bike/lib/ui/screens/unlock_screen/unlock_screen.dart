@@ -15,7 +15,7 @@ class UnlockScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => UnlockViewModel(context.read<UnlockRepository>(), context.read<AuthState>(), context.read<ActivePassNotifier>()),
+      create: (context) => UnlockViewModel(context.read<UnlockRepository>(), context.read<AuthState>(), context.read<ActivePassNotifier>()),
       child: UnlockContent(bike: bike),
     );
   }

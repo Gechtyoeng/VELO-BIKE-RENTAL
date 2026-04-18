@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
-import 'package:velo_bike/ui/screens/main_navigation_screen.dart';
 import 'package:velo_bike/ui/screens/map_screen/viewmodel/map_vm.dart';
 import 'package:velo_bike/ui/screens/map_screen/widgets/search_suggestion_list.dart';
 import 'package:velo_bike/ui/states/active_pass_state.dart';
@@ -24,7 +21,7 @@ class _MapContentState extends State<MapContent> {
   bool _isSearchExpanded = false;
 
   final TextEditingController _searchController = TextEditingController();
-  final MapController _mapController = MapController();
+
   @override
   void dispose() {
     _searchController.dispose();
@@ -74,7 +71,7 @@ class _MapContentState extends State<MapContent> {
           GestureDetector(
             onTap: _closePanels,
             behavior: HitTestBehavior.translucent,
-            child: BikeMapView(stations: vm.stations, isStationAvailable: vm.isStationAvailable, onBackgroundTap: _closePanels, mapController: _mapController),
+            child: BikeMapView(stations: vm.stations, isStationAvailable: vm.isStationAvailable, onBackgroundTap: _closePanels),
           ),
           SafeArea(
             child: Stack(
@@ -106,15 +103,11 @@ class _MapContentState extends State<MapContent> {
                           onSelect: (station) {
                             _searchController.text = station.name;
 
-                            _mapController.move(LatLng(station.latitude, station.longitude), 16);
-
                             vm.searchStations(station.name);
 
                             setState(() {
                               _isSearchExpanded = false;
                             });
-
-                            FocusScope.of(context).unfocus();
                           },
                         ),
                     ],

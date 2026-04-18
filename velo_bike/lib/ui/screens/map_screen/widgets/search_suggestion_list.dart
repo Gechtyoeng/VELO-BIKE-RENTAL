@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:velo_bike/models/station.dart';
+import 'package:velo_bike/ui/screens/station_screen/station_detail_screen.dart';
 
 class SearchSuggestionList extends StatelessWidget {
   final List<Station> stations;
@@ -40,7 +41,7 @@ class SearchSuggestionList extends StatelessWidget {
             leading: const Icon(Icons.location_on_outlined),
             title: Text(station.name, maxLines: 1, overflow: TextOverflow.ellipsis),
             subtitle: Text('${station.availableBikes} bikes available'),
-            onTap: () => onSelect(station),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => StationDetailScreen(station: station))),
           );
         },
       ),

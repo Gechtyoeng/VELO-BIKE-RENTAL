@@ -4,6 +4,8 @@ import 'package:velo_bike/data/repositories/bikes/bike_repository.dart';
 import 'package:velo_bike/data/repositories/bikes/firebase_bike_repo.dart';
 import 'package:velo_bike/data/repositories/pass/firebase_pass_repo.dart';
 import 'package:velo_bike/data/repositories/pass/pass_repository.dart';
+import 'package:velo_bike/data/repositories/rides/firebaase_ride_repo.dart';
+import 'package:velo_bike/data/repositories/rides/ride_ropository.dart';
 import 'package:velo_bike/data/repositories/stations/firebase_station_repo.dart';
 import 'package:velo_bike/data/repositories/stations/station_repository.dart';
 import 'package:velo_bike/data/repositories/unlock/firebase_unlock_repo.dart';
@@ -28,8 +30,16 @@ class MyApp extends StatelessWidget {
         Provider<StationRepository>(create: (_) => FirebaseStationRepo()),
         Provider<BikeRepository>(create: (_) => FirebaseBikeRepo()),
         Provider<PassRepository>(create: (_) => FirebasePassRepo()),
-        Provider<UnlockRepository>(create: (_) => FirebaseUnlockRepo()),
-        Provider<UnlockRepository>(create: (_) => FirebaseUnlockRepo()),
+        Provider<RideRepository>(create: (_) => FirebaaseRideRepo()),
+        Provider<UnlockRepository>(
+          create: (context) => FirebaseUnlockRepo(
+            userRepository: context.read<UserRepository>(),
+            passRepository: context.read<PassRepository>(),
+            bikeRepository: context.read<BikeRepository>(),
+            stationRepository: context.read<StationRepository>(),
+            rideRepository: context.read<RideRepository>(),
+          ),
+        ),
         //Global state
         ChangeNotifierProvider(create: (context) => AuthState(context.read<UserRepository>())..loadUser('user_001')),
         ChangeNotifierProvider(create: (_) => ActivePassNotifier()),

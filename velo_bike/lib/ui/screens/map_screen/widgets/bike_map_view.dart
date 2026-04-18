@@ -9,14 +9,12 @@ class BikeMapView extends StatelessWidget {
   final List<Station> stations;
   final bool Function(Station station) isStationAvailable;
   final VoidCallback onBackgroundTap;
-  final MapController mapController;
 
-  const BikeMapView({super.key, required this.stations, required this.isStationAvailable, required this.onBackgroundTap, required this.mapController});
+  const BikeMapView({super.key, required this.stations, required this.isStationAvailable, required this.onBackgroundTap});
 
   @override
   Widget build(BuildContext context) {
     return FlutterMap(
-      mapController: mapController,
       options: const MapOptions(initialCenter: LatLng(11.5564, 104.9282), initialZoom: 13),
       children: [
         TileLayer(urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', userAgentPackageName: 'com.example.velo'),

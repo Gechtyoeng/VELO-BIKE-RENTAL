@@ -49,8 +49,7 @@ class PassViewModel extends ChangeNotifier {
         _purchasedPasses = await passRepository.getUserPasses(userId);
 
         try {
-          _activePass = _purchasedPasses.firstWhere((pass) => pass.isActive);
-
+          _activePass = _purchasedPasses.firstWhere((pass) => _isPassUsable(pass));
           activePassNotifier.setActivePass(_activePass!);
         } catch (_) {
           _activePass = null;
@@ -59,6 +58,7 @@ class PassViewModel extends ChangeNotifier {
       } else {
         _purchasedPasses = [];
         _activePass = null;
+        activePassNotifier.clearActivePass();
       }
     } catch (e) {
       _error = 'Failed to load pass data: $e';
@@ -85,17 +85,26 @@ class PassViewModel extends ChangeNotifier {
         return;
       }
 
+      if (hasUsableActivePass) {
+        _error = 'You already have an active pass. Please use it first or wait until it expires.';
+        notifyListeners();
+        return;
+      }
+
       final newPass = await passRepository.buyPass(userId, _selectedPlan!);
 
       _purchasedPasses.add(newPass);
 
-      if (newPass.isActive) {
+      if (_isPassUsable(newPass)) {
         _activePass = newPass;
         activePassNotifier.setActivePass(newPass);
+      } else {
+        _activePass = null;
+        activePassNotifier.clearActivePass();
       }
 
-      _selectedPlan = null; // reset selection
-
+      _selectedPlan = null;
+      _error = null;
       notifyListeners();
     } catch (e) {
       _error = 'Failed to buy pass: $e';
@@ -103,43 +112,7 @@ class PassViewModel extends ChangeNotifier {
     }
   }
 
-  // ================= USE PASS 
-  Future<void> useActivePass() async {
-    if (_activePass == null) return;
-
-    if (_activePass!.remainingRides <= 0) {
-      _error = "No rides left";
-      notifyListeners();
-      return;
-    }
-
-    final updatedPass = UserPass(
-      id: _activePass!.id,
-      userId: _activePass!.userId,
-      planId: _activePass!.planId,
-      status: _activePass!.status,
-      startDate: _activePass!.startDate,
-      endDate: _activePass!.endDate,
-      totalRides: _activePass!.totalRides,
-      usedRides: _activePass!.usedRides + 1,
-    );
-
-    await passRepository.updateUserPass(updatedPass);
-
-    // update local state
-    _activePass = updatedPass;
-
-    final index = _purchasedPasses.indexWhere((p) => p.id == updatedPass.id);
-    if (index != -1) {
-      _purchasedPasses[index] = updatedPass;
-    }
-
-    activePassNotifier.setActivePass(updatedPass);
-
-    notifyListeners();
-  }
-
-  // HELPERS 
+  // HELPERS
   String getPlanNameById(String planId) {
     try {
       return _plans.firstWhere((plan) => plan.id == planId).name;
@@ -155,4 +128,14 @@ class PassViewModel extends ChangeNotifier {
       return null;
     }
   }
+
+  bool _isPassUsable(UserPass pass) {
+    return pass.isActive && !pass.isExpired && pass.remainingRides > 0;
+  }
+
+  bool get hasUsableActivePass {
+    return _activePass != null && _isPassUsable(_activePass!);
+  }
+
+  bool get canBuyNewPass => !hasUsableActivePass; // can purchase pass only when no active pass
 }

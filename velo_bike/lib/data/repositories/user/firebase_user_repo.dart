@@ -8,13 +8,11 @@ import 'dart:convert';
 class FirebaseUserRepo extends UserRepository {
   @override
   Future<User?> getUserById(String userId) async {
-    final uri = FirebaseConfig.baseUri.replace(
-      path: '/users/$userId.json',
-    );
+    final uri = FirebaseConfig.baseUri.replace(path: '/users/$userId.json');
 
     final response = await http.get(uri);
 
-     if (response.statusCode != 200) {
+    if (response.statusCode != 200) {
       throw Exception('Failed to fetch user');
     }
 
@@ -26,5 +24,15 @@ class FirebaseUserRepo extends UserRepository {
 
     final dto = UserDto.fromJson(userId, decoded);
     return dto.toModel();
+  }
+
+  @override
+  Future<void> updateCurrentRideId(String userId, String? rideId) async {
+    final url = FirebaseConfig.baseUri.replace(path: '/users/$userId.json');
+    final res = await http.patch(url, headers: {'Content-Type': 'application/json'}, body: json.encode({'currentRideId': rideId}));
+
+    if (res.statusCode != 200) {
+      throw Exception('Failed to update current ride id');
+    }
   }
 }

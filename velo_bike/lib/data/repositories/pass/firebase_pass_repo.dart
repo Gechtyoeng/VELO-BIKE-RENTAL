@@ -75,24 +75,27 @@ class FirebasePassRepo extends PassRepository {
   }
 
   @override
-  Future<void> updateUserPass(UserPass pass) async {
-    final uri = FirebaseConfig.baseUri.replace(path: '/userPasses/${pass.id}.json');
+  Future<void> updateUsedRides(String passId, int usedRides) async {
+    final url = FirebaseConfig.baseUri.replace(path: '/userPasses/$passId.json');
+    final res = await http.patch(url, headers: {'Content-Type': 'application/json'}, body: json.encode({'usedRides': usedRides}));
 
-    final body = {
-      "userId": pass.userId,
-      "planId": pass.planId,
-      "status": pass.status,
-      "startDate": pass.startDate.toIso8601String(),
-      "endDate": pass.endDate.toIso8601String(),
-      //update rides
-      "totalRides": pass.totalRides,
-      "usedRides": pass.usedRides,
-    };
-
-    final response = await http.put(uri, body: json.encode(body));
-
-    if (response.statusCode != 200) {
-      throw Exception("Failed to update pass");
+    if (res.statusCode != 200) {
+      throw Exception('Failed to update used rides');
     }
+  }
+
+  @override
+  Future<UserPass?> getUserPassById(String passId) async {
+    final url = FirebaseConfig.baseUri.replace(path: '/userPasses/$passId.json');
+    final res = await http.get(url);
+
+    if (res.statusCode != 200) {
+      throw Exception('Failed to fetch pass');
+    }
+
+    final decoded = json.decode(res.body);
+    if (decoded == null) return null;
+
+    return UserPassDto.fromJson(passId, Map<String, dynamic>.from(decoded)).toModel();
   }
 }

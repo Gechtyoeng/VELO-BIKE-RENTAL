@@ -249,16 +249,16 @@
             "planId": "plan_week",
             "status": "active",
             "totalRides": 7,
-            "useRides": 1,
-            "startDate": "2026-04-24T08:00:00Z",
-            "endDate": "2026-04-17T08:00:00Z"
+            "usedRides": 1,
+            "startDate": "2026-04-17T08:00:00Z",
+            "endDate": "2026-04-24T08:00:00Z"
         },
         "user_pass_002": {
             "userId": "user_001",
             "planId": "plan_week",
             "status": "expired",
             "totalRides": 7,
-            "useRides": 7,
+            "usedRides": 7,
             "startDate": "2026-03-20T08:00:00Z",
             "endDate": "2026-03-27T08:00:00Z"
         }

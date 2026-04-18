@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:velo_bike/data/repositories/unlock/unlock_repository.dart';
+import 'package:velo_bike/models/user_pass.dart';
 import 'package:velo_bike/ui/states/active_pass_state.dart';
 import 'package:velo_bike/ui/states/auth_state.dart';
-import '../../../../models/user_pass.dart';
 
 enum UnlockStatus { idle, loading, success, failure, noPass }
 
@@ -32,7 +32,7 @@ class UnlockViewModel extends ChangeNotifier {
 
     if (userId == null) {
       status = UnlockStatus.failure;
-      message = "User not logged in";
+      message = 'User not logged in';
       notifyListeners();
       return;
     }
@@ -45,13 +45,12 @@ class UnlockViewModel extends ChangeNotifier {
       final result = await repository.unlockBike(bikeId, userId);
 
       if (!result.success) {
-        if (result.message == "NO_PASS") {
+        if (result.message == 'NO_PASS') {
           status = UnlockStatus.noPass;
         } else {
           status = UnlockStatus.failure;
         }
-
-        message = _mapErrorMessage(result.message);
+        message = _mapMessage(result.message);
       } else {
         status = UnlockStatus.success;
         message = result.message;
@@ -66,18 +65,18 @@ class UnlockViewModel extends ChangeNotifier {
     }
   }
 
-  String _mapErrorMessage(String raw) {
+  String _mapMessage(String raw) {
     switch (raw) {
-      case "NO_PASS":
-        return "You do not have an active pass.";
-      case "PASS_INACTIVE":
-        return "Your pass is inactive.";
-      case "PASS_EXPIRED":
-        return "Your pass has expired.";
-      case "NO_RIDES_LEFT":
-        return "No rides left in your active pass.";
-      case "BIKE_NOT_AVAILABLE":
-        return "This bike is no longer available.";
+      case 'NO_PASS':
+        return 'You do not have an active pass.';
+      case 'PASS_INACTIVE':
+        return 'Your pass is inactive.';
+      case 'PASS_EXPIRED':
+        return 'Your pass has expired.';
+      case 'NO_RIDES_LEFT':
+        return 'No rides left in your active pass.';
+      case 'BIKE_NOT_AVAILABLE':
+        return 'This bike is no longer available.';
       default:
         return raw;
     }
@@ -92,10 +91,10 @@ class UnlockViewModel extends ChangeNotifier {
       userId: currentPass.userId,
       planId: currentPass.planId,
       status: currentPass.status,
-      startDate: currentPass.startDate,
-      endDate: currentPass.endDate,
       totalRides: currentPass.totalRides,
       usedRides: currentPass.usedRides + 1,
+      startDate: currentPass.startDate,
+      endDate: currentPass.endDate,
     );
 
     activePassNotifier.setActivePass(updatedPass);

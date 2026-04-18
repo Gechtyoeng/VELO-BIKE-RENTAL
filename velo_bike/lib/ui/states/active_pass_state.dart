@@ -6,7 +6,10 @@ class ActivePassNotifier extends ChangeNotifier {
 
   UserPass? get activePass => _activePass;
 
-  bool get hasActivePass => _activePass != null && _activePass!.isActive;
+  bool get hasActivePass {
+    if (_activePass == null) return false;
+    return _activePass!.isActive && !_activePass!.isExpired && _activePass!.remainingRides > 0;
+  }
 
   void setActivePass(UserPass pass) {
     _activePass = pass;
@@ -17,9 +20,10 @@ class ActivePassNotifier extends ChangeNotifier {
     _activePass = null;
     notifyListeners();
   }
-// refresh when expired and inactive
+
+  // refresh when expired and inactive
   void refreshPassStatus() {
-    if (_activePass != null && _activePass!.isExpired) {
+    if (_activePass != null && (_activePass!.isExpired || _activePass!.remainingRides <= 0)) {
       _activePass = null;
       notifyListeners();
     }

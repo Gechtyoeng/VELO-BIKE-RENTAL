@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:velo_bike/ui/screens/map_screen/map_screen.dart';
 import 'package:velo_bike/ui/screens/pass_screen/pass_screen.dart';
-import 'package:velo_bike/ui/screens/profile_screen/profile_scree.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
@@ -13,7 +12,7 @@ class MainNavigationScreen extends StatefulWidget {
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _currentIndex = 1;
 
-  late final List<Widget> _screens = [const PassScreen(), MapScreen(onNavigate: _onTabSelected), const ProfileScree()];
+  late final List<Widget> _screens = [const PassScreen(), MapScreen(onNavigate: _onTabSelected)];
 
   void _onTabSelected(int index) {
     setState(() {
@@ -45,7 +44,6 @@ class BottomNavBar extends StatelessWidget {
       destinations: const [
         NavigationDestination(icon: Icon(Icons.confirmation_number_outlined), selectedIcon: Icon(Icons.confirmation_number), label: 'Pass'),
         NavigationDestination(icon: Icon(Icons.map_outlined), selectedIcon: Icon(Icons.map), label: 'Map'),
-        NavigationDestination(icon: Icon(Icons.person_outline), selectedIcon: Icon(Icons.person), label: 'Profile'),
       ],
     );
   }

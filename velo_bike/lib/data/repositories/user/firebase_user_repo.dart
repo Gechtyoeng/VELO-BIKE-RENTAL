@@ -35,4 +35,14 @@ class FirebaseUserRepo extends UserRepository {
       throw Exception('Failed to update current ride id');
     }
   }
+  @override
+  Future<void> updateActivePassId(String userId, String? passId) async {
+    final url = FirebaseConfig.baseUri.replace(path: '/users/$userId.json');
+
+    final res = await http.patch(url, headers: {'Content-Type': 'application/json'}, body: json.encode({'activePassId': passId}));
+
+    if (res.statusCode != 200) {
+      throw Exception('Failed to update activePassId');
+    }
+  }
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:velo_bike/ui/screens/pass_screen/viewmodel/pass_vm.dart';
 import 'package:velo_bike/ui/screens/pass_screen/widgets/pass_plan_card.dart';
+import 'package:velo_bike/ui/screens/pass_screen/widgets/pass_purchase_dialog.dart';
+import 'package:velo_bike/ui/screens/pass_screen/widgets/pass_warning_dialog.dart';
 import 'package:velo_bike/ui/screens/pass_screen/widgets/purchased_pass_list.dart';
 import 'package:velo_bike/ui/theme/app_colors.dart';
 import 'package:velo_bike/ui/theme/app_spacing.dart';
@@ -28,20 +30,14 @@ class _PassScreenContentState extends State<PassScreenContent> {
           child: Column(
             children: [
               const SizedBox(height: 20),
-
               Text("Choose Your Pass", style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: 4),
               const Text("Unlock bikes anytime, anywhere"),
-
               const SizedBox(height: 20),
-
               _buildTabs(),
-
               const SizedBox(height: 20),
-
               Expanded(child: tabIndex == 0 ? _buildAvailable(vm) : PurchasedPassList(vm: vm)),
-
-              if (tabIndex == 0) _buildBuyButton(vm),
+              if (tabIndex == 0) _buildBuyButton(vm, context),
             ],
           ),
         ),
@@ -79,7 +75,6 @@ class _PassScreenContentState extends State<PassScreenContent> {
   }
 }
 
-// Available screen show all the passes
 Widget _buildAvailable(PassViewModel vm) {
   return ListView.separated(
     itemCount: vm.plans.length,
@@ -96,9 +91,30 @@ Widget _buildAvailable(PassViewModel vm) {
   );
 }
 
-Widget _buildBuyButton(PassViewModel vm) {
+Widget _buildBuyButton(PassViewModel vm, BuildContext context) {
   return Container(
     margin: const EdgeInsets.only(top: 16),
-    child: PrimaryButton(text: "Buy Now", isLoading: vm.isLoading, onPressed: vm.selectedPlan == null ? null : vm.buyPlan),
+    child: PrimaryButton(
+      text: "Buy Now",
+      isLoading: vm.isLoading,
+      onPressed: vm.selectedPlan == null
+          ? null
+          : () async {
+              if (vm.hasUsableActivePass) {
+                showDialog(context: context, builder: (_) => const ActivePassWarningDialog());
+                return;
+              }
+
+              await vm.buyPlan();
+
+              if (!context.mounted) return;
+
+              if (vm.isSuccess) {
+                showDialog(context: context, barrierDismissible: false, builder: (_) => const PassPurchaseSuccessDialog());
+                vm.resetSuccess();
+                return;
+              }
+            },
+    ),
   );
 }

@@ -5,10 +5,14 @@ import 'package:velo_bike/config/firebase_config.dart';
 import 'package:velo_bike/data/dtos/pass_plan_dto.dart';
 import 'package:velo_bike/data/dtos/user_pass_dto.dart';
 import 'package:velo_bike/data/repositories/pass/pass_repository.dart';
+import 'package:velo_bike/data/repositories/user/user_repository.dart';
 import 'package:velo_bike/models/pass_plan.dart';
 import 'package:velo_bike/models/user_pass.dart';
 
 class FirebasePassRepo extends PassRepository {
+   final UserRepository userRepository;
+
+  FirebasePassRepo(this.userRepository);
   @override
   Future<List<UserPass>> getUserPasses(String userId) async {
     final uri = FirebaseConfig.baseUri.replace(path: '/userPasses.json');
@@ -70,6 +74,8 @@ class FirebasePassRepo extends PassRepository {
     final decoded = json.decode(response.body);
 
     final newId = decoded['name']; // Firebase returns generated id
+
+     await userRepository.updateActivePassId(userId, newId);
 
     return UserPass(id: newId, userId: userId, planId: plan.id, status: "active", startDate: now, endDate: endDate, totalRides: plan.durationDays, usedRides: 0);
   }

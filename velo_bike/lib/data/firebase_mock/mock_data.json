@@ -4,7 +4,6 @@
             "name": "Mock User",
             "email": "mockuser@example.com",
             "activePassId": "user_pass_001",
-            "currentReservationId": "reservation_001",
             "currentRideId": null
         }
     },
@@ -247,38 +246,11 @@
         "user_pass_001": {
             "userId": "user_001",
             "planId": "plan_week",
-            "status": "active",
-            "totalRides": 7,
-            "usedRides": 1,
-            "startDate": "2026-04-17T08:00:00Z",
-            "endDate": "2026-04-24T08:00:00Z"
-        },
-        "user_pass_002": {
-            "userId": "user_001",
-            "planId": "plan_week",
             "status": "expired",
             "totalRides": 7,
             "usedRides": 7,
             "startDate": "2026-03-20T08:00:00Z",
             "endDate": "2026-03-27T08:00:00Z"
-        }
-    },
-    "reservations": {
-        "reservation_001": {
-            "userId": "user_001",
-            "bikeId": "bike_003",
-            "stationId": "station_001",
-            "status": "active",
-            "reservedAt": "2026-04-14T09:50:00Z",
-            "expiresAt": "2026-04-14T10:00:00Z"
-        },
-        "reservation_002": {
-            "userId": "user_001",
-            "bikeId": "bike_011",
-            "stationId": "station_002",
-            "status": "expired",
-            "reservedAt": "2026-04-13T10:00:00Z",
-            "expiresAt": "2026-04-13T10:10:00Z"
         }
     },
     "rides": {

@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         Provider<UserRepository>(create: (_) => FirebaseUserRepo()),
         Provider<StationRepository>(create: (_) => FirebaseStationRepo()),
         Provider<BikeRepository>(create: (_) => FirebaseBikeRepo()),
-        Provider<PassRepository>(create: (_) => FirebasePassRepo()),
+        Provider<PassRepository>(create: (context) => FirebasePassRepo(context.read<UserRepository>())),
         Provider<RideRepository>(create: (_) => FirebaaseRideRepo()),
         Provider<UnlockRepository>(
           create: (context) => FirebaseUnlockRepo(

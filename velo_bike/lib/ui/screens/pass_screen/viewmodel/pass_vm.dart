@@ -18,6 +18,7 @@ class PassViewModel extends ChangeNotifier {
   PassPlan? _selectedPlan;
 
   bool _isLoading = false;
+  bool _isSuccess = false;
   String? _error;
 
   List<PassPlan> get plans => _plans;
@@ -26,6 +27,7 @@ class PassViewModel extends ChangeNotifier {
   PassPlan? get selectedPlan => _selectedPlan;
 
   bool get isLoading => _isLoading;
+  bool get isSuccess => _isSuccess;
   String? get error => _error;
 
   List<UserPass> get previousPasses {
@@ -34,7 +36,6 @@ class PassViewModel extends ChangeNotifier {
     return passes;
   }
 
-  // ================= LOAD PASSES
   Future<void> loadPassData() async {
     try {
       _isLoading = true;
@@ -73,21 +74,24 @@ class PassViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ================= BUY PASS
   Future<void> buyPlan() async {
     if (_selectedPlan == null) return;
 
     try {
       final userId = authState.currentUser?.id;
+
+      _error = null;
+      _isSuccess = false;
+      _isLoading = true;
+      notifyListeners();
+
       if (userId == null) {
         _error = 'User not logged in';
-        notifyListeners();
         return;
       }
 
       if (hasUsableActivePass) {
         _error = 'You already have an active pass. Please use it first or wait until it expires.';
-        notifyListeners();
         return;
       }
 
@@ -105,14 +109,26 @@ class PassViewModel extends ChangeNotifier {
 
       _selectedPlan = null;
       _error = null;
-      notifyListeners();
+      _isSuccess = true;
     } catch (e) {
       _error = 'Failed to buy pass: $e';
+      _isSuccess = false;
+    } finally {
+      _isLoading = false;
       notifyListeners();
     }
   }
 
-  // HELPERS
+  void clearError() {
+    _error = null;
+    notifyListeners();
+  }
+
+  void resetSuccess() {
+    _isSuccess = false;
+    notifyListeners();
+  }
+
   String getPlanNameById(String planId) {
     try {
       return _plans.firstWhere((plan) => plan.id == planId).name;
@@ -137,5 +153,5 @@ class PassViewModel extends ChangeNotifier {
     return _activePass != null && _isPassUsable(_activePass!);
   }
 
-  bool get canBuyNewPass => !hasUsableActivePass; // can purchase pass only when no active pass
+  bool get canBuyNewPass => !hasUsableActivePass;
 }
